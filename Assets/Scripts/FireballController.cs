@@ -10,9 +10,11 @@ namespace BlastDash
         [SerializeField] private float speed;
         private float direction;
         private bool hit;
+        private float lifetime;
 
         private Animator animator;
         private BoxCollider2D boxCollider;
+        private static readonly int ExplodeHash = Animator.StringToHash("explode");
 
         private void Awake()
         {
@@ -28,13 +30,19 @@ namespace BlastDash
             }
             float movementSpeed = speed * Time.deltaTime * direction;
             transform.Translate(movementSpeed, 0, 0);
+
+            lifetime += Time.deltaTime;
+            if (lifetime > 5)
+            {
+                gameObject.SetActive(false);
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             hit = true;
             boxCollider.enabled = false;
-            animator.SetTrigger("explode");
+            animator.SetTrigger(ExplodeHash);
         }
 
         public void InitFireball(float fireDirection)
@@ -50,11 +58,12 @@ namespace BlastDash
             }
 
             transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+            lifetime = 0;
         }
 
         private void DeactivateFireball()
         {
-            ObjectPooler.Instance.BackToPool("Fireball", this.gameObject);
+            ObjectPooler.Instance.BackToPool(Utils.FireballTag, this.gameObject);
         }
     }
 }

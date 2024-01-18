@@ -12,6 +12,7 @@ namespace BlastDash
         private Animator animator;
         private PlayerMovement playerMovement;
         private float cooldownTimer = Mathf.Infinity;
+        private static readonly int AttackHash = Animator.StringToHash("attack");
 
         private void Awake()
         {
@@ -31,10 +32,10 @@ namespace BlastDash
 
         private void Attack()
         {
-            animator.SetTrigger("attack");
+            animator.SetTrigger(AttackHash);
             cooldownTimer = 0;
 
-            GameObject fireball = ObjectPooler.Instance.SpawnFromPool("Fireball", firePoint.position, Quaternion.identity);
+            GameObject fireball = ObjectPooler.Instance.SpawnFromPool(Utils.FireballTag, firePoint.position, Quaternion.identity);
             fireball.GetComponent<FireballController>().InitFireball(Mathf.Sign(transform.localScale.x));
         }
     }
