@@ -14,6 +14,7 @@ namespace BlastDash
         private Animator animator;
         private BoxCollider2D boxCollider;
         private float wallJumpCooldown = 0f;
+        private float horizontalInput;
         
         private static readonly int RunHash = Animator.StringToHash("run");
         private static readonly int GroundedHash = Animator.StringToHash("grounded");
@@ -28,7 +29,7 @@ namespace BlastDash
 
         private void Update()
         {
-            float horizontalInput = Input.GetAxis("Horizontal");
+            horizontalInput = Input.GetAxis("Horizontal");
             
             // Flip player direction
             if (horizontalInput > 0.01f)
@@ -74,12 +75,7 @@ namespace BlastDash
             body.velocity = new Vector2(body.velocity.x, speed);
             animator.SetTrigger(JumpHash);
         }
-
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            
-        }
-
+        
         private bool IsGrounded()
         {
             RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0,
@@ -94,6 +90,11 @@ namespace BlastDash
                 new Vector2(transform.localScale.x, 0), 0.1f, wallLayer);
             
             return raycastHit.collider != null;
+        }
+
+        public bool CanAttack()
+        {
+            return horizontalInput == 0 && IsGrounded() && !OnWall();
         }
     }
 }
