@@ -4,4 +4,11 @@ namespace BlastDash
     {
         public const string FireballTag = "Fireball";
     }
+
+    public enum SceneName
+    {
+        Menu,
+        Lobby,
+        Level1
+    }
 }

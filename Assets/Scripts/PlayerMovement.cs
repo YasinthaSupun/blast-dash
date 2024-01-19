@@ -15,7 +15,7 @@ namespace BlastDash
         private BoxCollider2D boxCollider;
         private float wallJumpCooldown = 0f;
         private float horizontalInput;
-        
+
         private static readonly int RunHash = Animator.StringToHash("run");
         private static readonly int GroundedHash = Animator.StringToHash("grounded");
         private static readonly int JumpHash = Animator.StringToHash("jump");
