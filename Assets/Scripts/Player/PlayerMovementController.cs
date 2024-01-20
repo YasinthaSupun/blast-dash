@@ -9,8 +9,11 @@ namespace BlastDash
 {
     public class PlayerMovementController : NetworkBehaviour
     {
+        [Networked] public Vector3 Velocity { get; set; }
+        
         private InputController inputController;
         private NetworkRigidbody2D rb;
+        
         private void Awake()
         {
             inputController = GetBehaviour<InputController>();
@@ -32,7 +35,13 @@ namespace BlastDash
                 {
                     rb.Rigidbody.velocity = new Vector2(1 * 5, rb.Rigidbody.velocity.y);
                 }
+                if (input.GetButton(InputButton.JUMP))
+                {
+                    rb.Rigidbody.velocity = new Vector2(rb.Rigidbody.velocity.x, 7);
+                }
             }
+            
+            Velocity = rb.Rigidbody.velocity;
         }
     }
 }

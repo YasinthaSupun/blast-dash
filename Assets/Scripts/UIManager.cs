@@ -31,7 +31,7 @@ namespace BlastDash
         private void OnDisable()
         {
             OnPlayerJoinedEvent.RemoveResponse(ShowLobbyPanel);
-            OnPlayerDataSpawnedEvent.RegisterResponse(UpdateLobbyList);
+            OnPlayerDataSpawnedEvent.RemoveResponse(UpdateLobbyList);
         }
 
         private void Start()

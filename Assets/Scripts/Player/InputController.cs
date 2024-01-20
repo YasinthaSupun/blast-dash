@@ -10,8 +10,8 @@ namespace BlastDash
     public class InputController : NetworkBehaviour, INetworkRunnerCallbacks
     {
         [Networked]
-        private NetworkButtons _prevData { get; set; }
-        public NetworkButtons PrevButtons { get => _prevData; set => _prevData = value; }
+        private NetworkButtons prevData { get; set; }
+        public NetworkButtons PrevButtons { get => prevData; set => prevData = value; }
         
         public override void Spawned()
         {
@@ -27,6 +27,7 @@ namespace BlastDash
             
             currentInput.buttons.Set(InputButton.LEFT, Input.GetKey(KeyCode.A));
             currentInput.buttons.Set(InputButton.RIGHT, Input.GetKey(KeyCode.D));
+            currentInput.buttons.Set(InputButton.JUMP, Input.GetKey(KeyCode.Space));
 
             input.Set(currentInput);
         }

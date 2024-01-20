@@ -12,12 +12,20 @@ namespace BlastDash
         
         [Networked]
         public NetworkBool InputsAllowed { get; set; }
-        
-        
-        public void SetInputsAllowed(bool value)
+
+        public override void Spawned()
         {
-            InputsAllowed = value;
+            if (Object.HasInputAuthority)
+            {
+                CameraController cameraController = FindObjectOfType<CameraController>();
+                cameraController.SetCameraPlayer(this.transform);
+            }
         }
+
+        // public void SetInputsAllowed(bool value)
+        // {
+        //     InputsAllowed = value;
+        // }
 
     }
 }
