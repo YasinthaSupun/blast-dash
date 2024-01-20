@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using Fusion;
 
 namespace BlastDash
 {
@@ -21,6 +22,12 @@ namespace BlastDash
                 Instance = this;
                 DontDestroyOnLoad(this);
             }
+        }
+
+        public void LoadLevel(NetworkRunner runner)
+        {
+            string scenePath = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(1));
+            runner.LoadScene(scenePath);
         }
         
         public async void LoadScene(SceneName scene)
