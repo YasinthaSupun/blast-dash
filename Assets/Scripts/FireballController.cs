@@ -21,6 +21,22 @@ namespace BlastDash
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider2D>();
         }
+        
+        public void InitFireball(float fireDirection)
+        {
+            this.direction = fireDirection;
+            hit = false;
+            boxCollider.enabled = true;
+
+            float localScaleX = transform.localScale.x;
+            if (Mathf.Sign(localScaleX) != direction)
+            {
+                localScaleX = -localScaleX;
+            }
+
+            transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
+            lifetime = 0;
+        }
 
         private void Update()
         {
@@ -44,23 +60,7 @@ namespace BlastDash
             boxCollider.enabled = false;
             animator.SetTrigger(ExplodeHash);
         }
-
-        public void InitFireball(float fireDirection)
-        {
-            this.direction = fireDirection;
-            hit = false;
-            boxCollider.enabled = true;
-
-            float localScaleX = transform.localScale.x;
-            if (Mathf.Sign(localScaleX) != direction)
-            {
-                localScaleX = -localScaleX;
-            }
-
-            transform.localScale = new Vector3(localScaleX, transform.localScale.y, transform.localScale.z);
-            lifetime = 0;
-        }
-
+        
         private void DeactivateFireball()
         {
             ObjectPooler.Instance.BackToPool(Utils.FireballTag, this.gameObject);

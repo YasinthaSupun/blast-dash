@@ -26,12 +26,12 @@ namespace BlastDash
         {
             if (playerMovementController.Velocity.x < -.1f)
             {
-                renderer.flipX = true;
+                transform.localScale = new Vector3(-1, 1, 1);
                 animator.SetBool(RunHash, true);
             }
             else if (playerMovementController.Velocity.x > .1f)
             {
-                renderer.flipX = false;
+                transform.localScale = Vector3.one;
                 animator.SetBool(RunHash, true);
             }
             else

@@ -28,6 +28,7 @@ namespace BlastDash
             currentInput.buttons.Set(InputButton.LEFT, Input.GetKey(KeyCode.A));
             currentInput.buttons.Set(InputButton.RIGHT, Input.GetKey(KeyCode.D));
             currentInput.buttons.Set(InputButton.JUMP, Input.GetKey(KeyCode.Space));
+            currentInput.buttons.Set(InputButton.SHOOT, Input.GetMouseButton(0));
 
             input.Set(currentInput);
         }

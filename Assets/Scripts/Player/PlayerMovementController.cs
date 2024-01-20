@@ -9,10 +9,15 @@ namespace BlastDash
 {
     public class PlayerMovementController : NetworkBehaviour
     {
+        [SerializeField] private Transform spawnPoint;
+        [SerializeField] private GameObject fireball;
+        [SerializeField] private float attackCooldown;
+        
         [Networked] public Vector3 Velocity { get; set; }
         
         private InputController inputController;
         private NetworkRigidbody2D rb;
+        private float cooldownTimer = Mathf.Infinity;
         
         private void Awake()
         {
@@ -39,9 +44,35 @@ namespace BlastDash
                 {
                     rb.Rigidbody.velocity = new Vector2(rb.Rigidbody.velocity.x, 7);
                 }
+                if (input.GetButton(InputButton.SHOOT) && cooldownTimer > attackCooldown)
+                {
+                    FireAttack();
+                }
             }
             
             Velocity = rb.Rigidbody.velocity;
+        }
+
+        private void Update()
+        {
+            cooldownTimer += Time.deltaTime;
+        }
+
+        private void FireAttack()
+        {
+            if (Object.HasInputAuthority)
+            {
+                RPC_FireballAttack(spawnPoint.position);
+            }
+            
+            cooldownTimer = 0;
+        }
+        
+        [Rpc(sources: RpcSources.All, targets: RpcTargets.All)]
+        private void RPC_FireballAttack(Vector3 fireballSpawnPoint)
+        {
+            GameObject fireball = ObjectPooler.Instance.SpawnFromPool(Utils.FireballTag, fireballSpawnPoint, Quaternion.identity);
+            fireball.GetComponent<FireballController>().InitFireball(Mathf.Sign(transform.localScale.x));
         }
     }
 }

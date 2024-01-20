@@ -10,8 +10,8 @@ namespace BlastDash
     {
         LEFT,
         RIGHT,
-        SHOOT,
         JUMP,
+        SHOOT,
     }
     
     public struct InputData : INetworkInput
