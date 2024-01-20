@@ -445,6 +445,7 @@ GameObject:
   m_Component:
   - component: {fileID: 777642926}
   - component: {fileID: 777642925}
+  - component: {fileID: 777642927}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -479,6 +480,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &777642927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777642924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2279991115
+  ObjectInterest: 1
+  Flags: 1
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 777642925}
 --- !u!1 &984475221
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,7 +609,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1415487213
 Transform:
   m_ObjectHideFlags: 0
@@ -769,7 +788,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab:
-    RawGuidValue: 00000000000000000000000000000000
+    RawGuidValue: 133bf53f9e3692a43a9d6f49c4bb54be
+  spawnPoint: {fileID: 1254375464}
 --- !u!4 &1506985440
 Transform:
   m_ObjectHideFlags: 0
