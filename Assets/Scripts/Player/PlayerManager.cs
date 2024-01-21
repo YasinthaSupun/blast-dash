@@ -100,6 +100,7 @@ namespace BlastDash
                 Health -= Utils.PlayerHealthReduction;
                 if (Health == 0)
                 {
+                    AudioManager.Instance.soundEffect1.PlayOneShot(AudioManager.Instance.audioClips.die);
                     rb.Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
                     animation.PlayerDeath();
                     RespawnTimer = TickTimer.CreateFromSeconds(Runner, 1f);

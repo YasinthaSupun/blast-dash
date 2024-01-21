@@ -51,6 +51,7 @@ namespace BlastDash
                 }
                 if (input.GetButton(InputButton.SHOOT) && cooldownTimer > attackCooldown)
                 {
+                    AudioManager.Instance.soundEffect1.PlayOneShot(AudioManager.Instance.audioClips.fire);
                     FireAttack();
                 }
             }
