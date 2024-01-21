@@ -13,8 +13,8 @@ namespace BlastDash
         
         public FusionEvent OnPlayerDataSpawnedEvent;
         
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
-        public void RPC_SetPlayerName(string name)
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        private void RPC_SetPlayerName(string name)
         {
             Name = name;
         }

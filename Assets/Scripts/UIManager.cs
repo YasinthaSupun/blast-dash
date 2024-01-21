@@ -13,8 +13,9 @@ namespace BlastDash
         [SerializeField] private GameObject initGamePanel;
         [SerializeField] private GameObject lobbyPanel;
         [SerializeField] private GameObject playerUI;
-        [SerializeField] private TMP_InputField createRoomID;
-        [SerializeField] private TMP_InputField joinRoomID;
+        [SerializeField] private Transform content;
+        [SerializeField] private Transform startButton;
+        [SerializeField] private TMP_InputField roomID;
         [SerializeField] private TMP_InputField name;
         
         [SerializeField] private FusionEvent OnPlayerJoinedEvent;
@@ -42,18 +43,16 @@ namespace BlastDash
 
         public void CreateRoom()
         {
-            playerName = name.text;
-            PlayerPrefs.SetString(Utils.PlayerNamePref, playerName);
+            SetPlayerName();
             FusionLauncher Launcher = FindObjectOfType<FusionLauncher>();
-            Launcher.Launch(GameMode.Host, createRoomID.text);
+            Launcher.Launch(GameMode.Host, roomID.text);
         }
 
         public void JoinRoom()
         {
-            playerName = name.text;
-            PlayerPrefs.SetString(Utils.PlayerNamePref, playerName);
+            SetPlayerName();
             FusionLauncher Launcher = FindObjectOfType<FusionLauncher>();
-            Launcher.Launch(GameMode.Client, joinRoomID.text);
+            Launcher.Launch(GameMode.Client, roomID.text);
         }
         
         public void StartGame()
@@ -61,6 +60,12 @@ namespace BlastDash
             FusionHelper.LocalRunner.SessionInfo.IsOpen = false;
             FusionHelper.LocalRunner.SessionInfo.IsVisible = false;
             NavigationManager.Instance.LoadLevel(FusionHelper.LocalRunner);
+        }
+        
+        private void SetPlayerName()
+        {
+            playerName = name.text;
+            PlayerPrefs.SetString(Utils.PlayerNamePref, playerName);
         }
 
         private void ShowLobbyPanel(PlayerRef player, NetworkRunner runner)
@@ -71,17 +76,27 @@ namespace BlastDash
         
         private void UpdateLobbyList(PlayerRef playerRef, NetworkRunner runner)
         {
-            //_startButton.gameObject.SetActive(runner.IsServer);
+            startButton.gameObject.SetActive(runner.IsServer);
             string players = default;
             string isLocal;
+            ClearContentList();
             foreach(var player in runner.ActivePlayers)
             {
                 isLocal = player == runner.LocalPlayer ? " (You)" : string.Empty;
-                players += GameManager.Instance.GetPlayerData(player, runner)?.Name + isLocal + " \n";
+                string currentPlayerName = GameManager.Instance.GetPlayerData(player, runner)?.Name + isLocal ;
+                GameObject playerUIObj = Instantiate(playerUI, content);
+                playerUIObj.GetComponent<PlayerUI>().SetPlayerName(currentPlayerName);
             }
             Debug.Log(players);
-            // _lobbyPlayerText.text = players;
             // _lobbyRoomName.text = $"Room: {runner.SessionInfo.Name}";
+        }
+
+        private void ClearContentList()
+        {
+            foreach (Transform child in content)
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 }

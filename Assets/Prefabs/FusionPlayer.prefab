@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPoint: {fileID: 955478435963232878}
-  fireball: {fileID: 8979378684779737852, guid: 9dbce404da2624b4e805af09f4c35dd8, type: 3}
+  warrior: {fileID: 3522974204872992905}
   attackCooldown: 0.25
   _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &4732515195776660683

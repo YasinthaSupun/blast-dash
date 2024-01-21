@@ -10,7 +10,7 @@ namespace BlastDash
     public class PlayerMovementController : NetworkBehaviour
     {
         [SerializeField] private Transform spawnPoint;
-        [SerializeField] private GameObject fireball;
+        [SerializeField] private Transform warrior;
         [SerializeField] private float attackCooldown;
         
         [Networked] public Vector3 Velocity { get; set; }
@@ -72,7 +72,7 @@ namespace BlastDash
         private void RPC_FireballAttack(Vector3 fireballSpawnPoint)
         {
             GameObject fireball = ObjectPooler.Instance.SpawnFromPool(Utils.FireballTag, fireballSpawnPoint, Quaternion.identity);
-            fireball.GetComponent<FireballController>().InitFireball(Mathf.Sign(transform.localScale.x));
+            fireball.GetComponent<FireballController>().InitFireball(Mathf.Sign(warrior.localScale.x));
         }
     }
 }

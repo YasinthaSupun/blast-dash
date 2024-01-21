@@ -8,7 +8,6 @@ namespace BlastDash
 
     public enum SceneName
     {
-        Menu,
         Lobby,
         Level1
     }
