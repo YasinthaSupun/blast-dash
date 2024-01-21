@@ -8,7 +8,7 @@ namespace BlastDash
     public class PlayerSpawner : MonoBehaviour
     {
         public NetworkPrefabRef playerPrefab;
-        [SerializeField] private Transform spawnPoint;
+        public Transform[] spawnPoints;
         
         public void ReSpawnPlayers(NetworkRunner runner)
         {
@@ -20,17 +20,18 @@ namespace BlastDash
                 }
             }
         }
+
+        public Vector3 GetRandomSpawnPoint()
+        {
+            int index = Random.Range(0, spawnPoints.Length);
+            return spawnPoints[index].position;
+        }
         
         private void SpawnPlayer(NetworkRunner runner, PlayerRef player, string nick = "")
         {
             if (runner.IsServer)
             {
-                NetworkObject playerObj = runner.Spawn(playerPrefab, spawnPoint.position, Quaternion.identity, player);
-
-                // PlayerData data = GameManager.Instance.GetPlayerData(player, runner);
-                // data.Instance = playerObj;
-                //
-                // playerObj.GetComponent<PlayerBehaviour>().Nickname = data.Nick;
+                NetworkObject playerObj = runner.Spawn(playerPrefab,  GetRandomSpawnPoint(), Quaternion.identity, player);
             }
         }
     }

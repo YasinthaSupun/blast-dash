@@ -5,6 +5,7 @@ namespace BlastDash
         public const string FireballTag = "Fireball";
         public const string PlayerNamePref = "Name";
         public const int PlayerHealthMax = 10;
+        public const int PlayerHealthReduction = 2;
     }
 
     public enum SceneName

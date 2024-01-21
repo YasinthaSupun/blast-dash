@@ -14,6 +14,7 @@ namespace BlastDash
         private static readonly int RunHash = Animator.StringToHash("run");
         private static readonly int GroundedHash = Animator.StringToHash("grounded");
         private static readonly int JumpHash = Animator.StringToHash("jump");
+        private static readonly int DieHash = Animator.StringToHash("die");
         
         private void Start()
         {
@@ -38,6 +39,17 @@ namespace BlastDash
             {
                 animator.SetBool(RunHash, false);
             }
+        }
+
+        public void PlayerDeath()
+        {
+            animator.SetBool(RunHash, true);
+            animator.SetTrigger(DieHash);
+        }
+
+        public void Respawn()
+        {
+            animator.SetBool(RunHash, false);
         }
     }
 }

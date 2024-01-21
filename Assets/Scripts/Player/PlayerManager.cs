@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Fusion;
+using Fusion.Addons.Physics;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +14,7 @@ namespace BlastDash
     {
         [SerializeField] private TMP_Text playerNameUI;
         [SerializeField] private Slider healthUI;
+        [SerializeField] private PlayerAnimation animation;
         
         [Networked]
         public NetworkString<_16> PlayerName { get; set; }
@@ -19,7 +22,31 @@ namespace BlastDash
         [Networked]
         public int Health { get; set; }
         
+        [Networked]
+        private NetworkBool Respawning { get; set; }
+        
+        [Networked]
+        private TickTimer RespawnTimer { get; set; }
+        
         private ChangeDetector changeDetector;
+        private NetworkRigidbody2D rb;
+
+        private void Awake()
+        {
+            rb = GetBehaviour<NetworkRigidbody2D>();
+        }
+
+        public override void FixedUpdateNetwork()
+        {
+            if (Respawning)
+            {
+                if (RespawnTimer.Expired(Runner))
+                {
+                    rb.Rigidbody.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    StartCoroutine(Respawn());
+                }
+            }
+        }
 
         public override void Spawned()
         {
@@ -42,23 +69,49 @@ namespace BlastDash
         }
 
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
-        public void RPC_SetPlayerName(string name)
+        private void RPC_SetPlayerName(string name)
         {
             PlayerName = name;
         }
         
         [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
-        public void RPC_SetPlayerHealth(int health)
+        private void RPC_SetPlayerHealth(int health)
         {
             Health = health;
         }
 
+        private IEnumerator Respawn()
+        {
+            rb.Teleport(FindObjectOfType<PlayerSpawner>().GetRandomSpawnPoint());
+            yield return new WaitForSeconds(.1f);
+            Respawning = false;
+            if (Object.HasInputAuthority)
+            {
+                healthUI.value = Utils.PlayerHealthMax;
+                RPC_SetPlayerHealth(Utils.PlayerHealthMax);
+            }
+            animation.Respawn();
+        }
+        
         private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.tag == Utils.FireballTag)
             {
-                Health -= 2;
-                RPC_SetPlayerHealth(Health);
+                Health -= Utils.PlayerHealthReduction;
+                if (Health == 0)
+                {
+                    rb.Rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
+                    animation.PlayerDeath();
+                    RespawnTimer = TickTimer.CreateFromSeconds(Runner, 1f);
+                    Respawning = true;
+                }
+                else
+                {
+                    if (Object.HasInputAuthority)
+                    {
+                        RPC_SetPlayerHealth(Health);
+                    }
+                }
             }
         }
 

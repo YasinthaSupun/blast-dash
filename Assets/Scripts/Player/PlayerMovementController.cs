@@ -9,20 +9,25 @@ namespace BlastDash
 {
     public class PlayerMovementController : NetworkBehaviour
     {
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private float jumpPower;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Transform warrior;
         [SerializeField] private float attackCooldown;
+        [SerializeField] private LayerMask groundLayer;
         
         [Networked] public Vector3 Velocity { get; set; }
         
         private InputController inputController;
         private NetworkRigidbody2D rb;
         private float cooldownTimer = Mathf.Infinity;
+        private BoxCollider2D boxCollider;
         
         private void Awake()
         {
             inputController = GetBehaviour<InputController>();
             rb = GetComponent<NetworkRigidbody2D>();
+            boxCollider = GetComponent<BoxCollider2D>();
         }
 
         public override void FixedUpdateNetwork()
@@ -34,15 +39,15 @@ namespace BlastDash
                 
                 if (input.GetButton(InputButton.LEFT))
                 {
-                    rb.Rigidbody.velocity = new Vector2(-1 * 5, rb.Rigidbody.velocity.y);
+                    rb.Rigidbody.velocity = new Vector2(-1 * moveSpeed, rb.Rigidbody.velocity.y);
                 }
                 else if (input.GetButton(InputButton.RIGHT))
                 {
-                    rb.Rigidbody.velocity = new Vector2(1 * 5, rb.Rigidbody.velocity.y);
+                    rb.Rigidbody.velocity = new Vector2(1 * moveSpeed, rb.Rigidbody.velocity.y);
                 }
-                if (input.GetButton(InputButton.JUMP))
+                if (input.GetButton(InputButton.JUMP) && IsGrounded())
                 {
-                    rb.Rigidbody.velocity = new Vector2(rb.Rigidbody.velocity.x, 7);
+                    rb.Rigidbody.velocity = new Vector2(rb.Rigidbody.velocity.x, jumpPower);
                 }
                 if (input.GetButton(InputButton.SHOOT) && cooldownTimer > attackCooldown)
                 {
@@ -57,6 +62,14 @@ namespace BlastDash
         {
             cooldownTimer += Time.deltaTime;
         }
+        
+        private bool IsGrounded()
+        {
+            RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0,
+                Vector2.down, 0.1f, groundLayer);
+            
+            return raycastHit.collider != null;
+        } 
 
         private void FireAttack()
         {

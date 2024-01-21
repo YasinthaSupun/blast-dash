@@ -291,9 +291,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6b256fcf64900449cfe90feb7955dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  jumpPower: 20
   spawnPoint: {fileID: 955478435963232878}
   warrior: {fileID: 3522974204872992905}
   attackCooldown: 0.25
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
   _Velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &4732515195776660683
 MonoBehaviour:
@@ -331,6 +336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNameUI: {fileID: 5177210937311745233}
   healthUI: {fileID: 6989666208641774876}
+  animation: {fileID: 5054980532188660944}
   _PlayerName:
     _length: 0
     _data:
