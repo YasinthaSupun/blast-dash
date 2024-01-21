@@ -12,8 +12,10 @@ namespace BlastDash
         public NetworkString<_16> Name { get; set; }
         
         public FusionEvent OnPlayerDataSpawnedEvent;
+        private ChangeDetector changeDetector;
+
         
-        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.All)]
+        [Rpc(sources: RpcSources.InputAuthority, targets: RpcTargets.StateAuthority)]
         private void RPC_SetPlayerName(string name)
         {
             Name = name;
@@ -21,8 +23,12 @@ namespace BlastDash
         
         public override void Spawned()
         {
+            changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState, false);
+            
             if (Object.HasInputAuthority)
+            {
                 RPC_SetPlayerName(PlayerPrefs.GetString(Utils.PlayerNamePref));
+            }
             
             DontDestroyOnLoad(this);
             Runner.SetPlayerObject(Object.InputAuthority, Object);
@@ -31,6 +37,19 @@ namespace BlastDash
             if (Object.HasStateAuthority)
             {
                 GameManager.Instance.SetPlayerDataObject(Object.InputAuthority, this);
+            }
+        }
+        
+        public override void Render()
+        {
+            foreach (var change in changeDetector.DetectChanges(this))
+            {
+                switch (change)
+                {
+                    case nameof(Name):
+                        OnPlayerDataSpawnedEvent?.Raise(Object.InputAuthority, Runner);
+                        break;
+                }
             }
         }
     }

@@ -17,12 +17,14 @@ namespace BlastDash
         {
             networkRunner = GetComponent<NetworkRunner>();
             fusionSceneManager = GetComponent<FusionSceneManager>();
-            networkRunner.name = name;
-            networkRunner.ProvideInput = true;
+            
         }
 
         public void Launch(GameMode mode, string room)
         {
+            networkRunner.name = name;
+            networkRunner.ProvideInput = true;
+            
             networkRunner.StartGame(new StartGameArgs()
             {
                 GameMode = mode,
