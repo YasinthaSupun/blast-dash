@@ -84,12 +84,9 @@ namespace BlastDash
             {
                 isLocal = player == runner.LocalPlayer ? " (You)" : string.Empty;
                 string currentPlayerName = GameManager.Instance.GetPlayerData(player, runner)?.Name + isLocal ;
-                Debug.Log("zzzz"+currentPlayerName);
                 GameObject playerUIObj = Instantiate(playerUI, content);
                 playerUIObj.GetComponent<PlayerUI>().SetPlayerName(currentPlayerName);
             }
-            
-            // _lobbyRoomName.text = $"Room: {runner.SessionInfo.Name}";
         }
 
         private void ClearContentList()

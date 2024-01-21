@@ -7,10 +7,4 @@ namespace BlastDash
         public const int PlayerHealthMax = 10;
         public const int PlayerHealthReduction = 2;
     }
-
-    public enum SceneName
-    {
-        Lobby,
-        Level1
-    }
 }
